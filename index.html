@@ -1,0 +1,505 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Earlybird Schools | Exam Results</title>
+
+<style>
+:root {
+    --red: #dc2626;
+    --dark-red: #7f1d1d;
+    --light-red: #fef2f2;
+    --text: #292929;
+    --muted: #777;
+    --white: #fff;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    color: var(--text);
+}
+
+header {
+    background: linear-gradient(120deg, #7f1d1d, #dc2626);
+    color: white;
+    padding: 35px 20px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 29px;
+    margin-bottom: 8px;
+}
+
+header p {
+    opacity: .9;
+    font-size: 14px;
+}
+
+.container {
+    max-width: 1050px;
+    margin: 30px auto;
+    padding: 0 18px;
+}
+
+.student-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 3px 15px #0000000c;
+    margin-bottom: 25px;
+}
+
+.student-card h2 {
+    color: var(--dark-red);
+    margin-bottom: 18px;
+}
+
+.student-details {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.detail-label {
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+.detail-value {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.tab {
+    border: 1px solid #ddd;
+    background: white;
+    padding: 12px 20px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #555;
+}
+
+.tab.active {
+    background: var(--red);
+    color: white;
+    border-color: var(--red);
+}
+
+.tab:hover:not(.active) {
+    background: var(--light-red);
+}
+
+.summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.summary-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 4px solid var(--red);
+    box-shadow: 0 2px 10px #00000008;
+}
+
+.summary-card p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.summary-card h2 {
+    color: var(--dark-red);
+    font-size: 27px;
+}
+
+.results-card {
+    background: white;
+    border-radius: 12px;
+    padding: 22px;
+    box-shadow: 0 3px 15px #0000000c;
+    margin-bottom: 25px;
+}
+
+.results-card h2 {
+    color: var(--dark-red);
+    margin-bottom: 18px;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 650px;
+}
+
+th {
+    background: var(--dark-red);
+    color: white;
+    padding: 14px 12px;
+    text-align: left;
+    font-size: 13px;
+}
+
+td {
+    padding: 14px 12px;
+    border-bottom: 1px solid #eee;
+    font-size: 13px;
+}
+
+tr:hover td {
+    background: #fff7f7;
+}
+
+.grade {
+    display: inline-block;
+    background: var(--light-red);
+    color: var(--dark-red);
+    padding: 5px 9px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.remarks {
+    background: var(--light-red);
+    border-left: 4px solid var(--red);
+    padding: 18px;
+    border-radius: 7px;
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.remarks h3 {
+    color: var(--dark-red);
+    font-size: 15px;
+    margin-bottom: 7px;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    margin: 20px 0;
+}
+
+.print-btn {
+    background: var(--red);
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 7px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.print-btn:hover {
+    background: var(--dark-red);
+}
+
+footer {
+    background: #292929;
+    color: white;
+    text-align: center;
+    padding: 25px;
+    margin-top: 40px;
+    font-size: 13px;
+}
+
+@media(max-width: 650px) {
+    .student-details,
+    .summary {
+        grid-template-columns: 1fr;
+    }
+
+    header h1 {
+        font-size: 23px;
+    }
+
+    .tab {
+        flex: 1;
+        padding: 11px 8px;
+    }
+}
+
+@media print {
+    body {
+        background: white;
+    }
+
+    header {
+        background: #7f1d1d !important;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+
+    .tabs, .actions, footer {
+        display: none !important;
+    }
+
+    .container {
+        margin: 10px auto;
+    }
+
+    .student-card, .results-card, .summary-card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+
+    .grade, th {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>EARLYBIRD SCHOOLS</h1>
+    <p>Student Academic Results Portal</p>
+</header>
+
+<main class="container">
+
+    <section class="student-card">
+        <h2>Student Information</h2>
+
+        <div class="student-details">
+            <div>
+                <p class="detail-label">Student Name</p>
+                <p class="detail-value">Monique Nganga</p>
+            </div>
+
+            <div>
+                <p class="detail-label">Admission Number</p>
+                <p class="detail-value">JSS10206</p>
+            </div>
+
+            <div>
+                <p class="detail-label">Class</p>
+                <p class="detail-value">Grade 8 Purple</p>
+            </div>
+
+            <div>
+                <p class="detail-label">Term</p>
+                <p class="detail-value">Term 3</p>
+            </div>
+
+            <div>
+                <p class="detail-label">Year</p>
+                <p class="detail-value">2026</p>
+            </div>
+
+            <div>
+                <p class="detail-label">School</p>
+                <p class="detail-value">Earlybird Schools</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="tabs">
+        <button class="tab" onclick="showExam('opener', this)">Opener Exams</button>
+        <button class="tab" onclick="showExam('sba', this)">SBA Exams</button>
+        <button class="tab active" onclick="showExam('endterm', this)">End Term</button>
+    </div>
+
+    <section class="summary">
+        <div class="summary-card">
+            <p>Total Marks</p>
+            <h2 id="total">730 / 900</h2>
+        </div>
+
+        <div class="summary-card">
+            <p>Mean Percentage</p>
+            <h2 id="percentage">81%</h2>
+        </div>
+
+        <div class="summary-card">
+            <p>Mean Grade</p>
+            <h2 id="meanGrade">EE2</h2>
+        </div>
+    </section>
+
+    <section class="results-card">
+        <h2 id="examTitle">End Term Examination Results</h2>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Marks</th>
+                        <th>Percentage</th>
+                        <th>Grade</th>
+                        <th>Teacher</th>
+                    </tr>
+                </thead>
+
+                <tbody id="resultsTable"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="results-card">
+        <h2>Teacher's Remarks</h2>
+
+        <div class="remarks">
+            <h3>Class Teacher</h3>
+            <p id="classRemark"></p>
+        </div>
+
+        <div class="remarks">
+            <h3>Head Teacher</h3>
+            <p id="headRemark"></p>
+        </div>
+    </section>
+
+    <div class="actions">
+        <button class="print-btn" onclick="window.print()">
+            Print Results
+        </button>
+    </div>
+
+</main>
+
+<footer>
+    <p>EARLYBIRD SCHOOLS</p>
+    <p>Learning Today, Leading Tomorrow.</p>
+    <p style="margin-top:10px;">Student Academic Results Portal © 2026</p>
+</footer>
+
+<script>
+const exams = {
+    endterm: {
+        title: "End Term Examination Results",
+        total: "730 / 900",
+        percentage: "81%",
+        grade: "EE2",
+        classRemark: "You are demonstrating superior work in your subjects, often taking concepts to a higher level.",
+        headRemark: "You are performing well. Your progress is steady and with continual focus and dedication, you will continue to perform better.",
+        subjects: [
+            ["English", "79 / 100", "79", "ME1", "Brian Simiyu"],
+            ["Kiswahili", "67 / 100", "67", "ME2", "Alice Oenga"],
+            ["Mathematics", "72 / 100", "72", "ME1", "Evance Luka"],
+            ["Integrated Science", "85 / 100", "85", "EE2", "Benson Otieno"],
+            ["Social Studies", "84 / 100", "84", "EE2", "—"],
+            ["Christian Religious Education", "84 / 100", "84", "EE2", "—"],
+            ["Creative Arts & Sports", "92 / 100", "92", "EE1", "Cynthia Nthuku"],
+            ["Agriculture", "79 / 100", "79", "ME1", "—"],
+            ["Pre-Technical Studies", "88 / 100", "88", "EE2", "—"],
+            ["French", "100 / 100", "100", "EE1", "—"]
+        ]
+    },
+
+    sba: {
+        title: "SBA Examination Results",
+        total: "716 / 900",
+        percentage: "80%",
+        grade: "EE2",
+        classRemark: "You are demonstrating superior work in your subjects, often taking concepts to a higher level.",
+        headRemark: "You are performing well. Your progress is steady and with continual focus and dedication, you will continue to perform better.",
+        subjects: [
+            ["English", "85 / 100", "85", "EE2", "Brian Simiyu"],
+            ["Kiswahili", "67 / 100", "67", "ME2", "Alice Oenga"],
+            ["Mathematics", "56 / 100", "56", "AE1", "Evance Luka"],
+            ["Integrated Science", "83 / 100", "83", "EE2", "Benson Otieno"],
+            ["Social Studies", "88 / 100", "88", "EE2", "—"],
+            ["Christian Religious Education", "37 / 50", "74", "ME1", "—"],
+            ["Creative Arts & Sports", "82 / 100", "82", "EE2", "Cynthia Nthuku"],
+            ["Agriculture", "91 / 100", "91", "EE1", "—"],
+            ["Pre-Technical Studies", "90 / 100", "90", "EE1", "—"]
+        ]
+    },
+
+    opener: {
+        title: "Opener Examination Results",
+        total: "713 / 900",
+        percentage: "79%",
+        grade: "ME1",
+        classRemark: "You have consistently produced work that meets grade level expectations. Continue to grow and take initiative next term.",
+        headRemark: "You are meeting expected standards though there is room for improvement and have positive momentum.",
+        subjects: [
+            ["English", "82 / 100", "82", "EE2", "Brian Simiyu"],
+            ["Kiswahili", "90 / 100", "90", "EE1", "Alice Oenga"],
+            ["Mathematics", "36 / 100", "36", "BE1", "Evance Luka"],
+            ["Integrated Science", "80 / 100", "80", "EE2", "Benson Otieno"],
+            ["Social Studies", "76 / 100", "76", "ME1", "—"],
+            ["Christian Religious Education", "84 / 100", "84", "EE2", "—"],
+            ["Creative Arts & Sports", "94 / 100", "94", "EE1", "Cynthia Nthuku"],
+            ["Agriculture", "80 / 100", "80", "EE2", "—"],
+            ["Pre-Technical Studies", "91 / 100", "91", "EE1", "—"],
+            ["French", "88 / 100", "88", "EE2", "—"]
+        ]
+    }
+};
+
+function showExam(exam, button) {
+    const data = exams[exam];
+
+    document.getElementById("examTitle").textContent = data.title;
+    document.getElementById("total").textContent = data.total;
+    document.getElementById("percentage").textContent = data.percentage;
+    document.getElementById("meanGrade").textContent = data.grade;
+    document.getElementById("classRemark").textContent = data.classRemark;
+    document.getElementById("headRemark").textContent = data.headRemark;
+
+    const table = document.getElementById("resultsTable");
+    table.innerHTML = "";
+
+    data.subjects.forEach(subject => {
+        const row = document.createElement("tr");
+
+        subject.forEach((value, index) => {
+            const cell = document.createElement("td");
+
+            if (index === 3) {
+                const grade = document.createElement("span");
+                grade.className = "grade";
+                grade.textContent = value;
+                cell.appendChild(grade);
+            } else {
+                cell.textContent = value;
+            }
+
+            row.appendChild(cell);
+        });
+
+        table.appendChild(row);
+    });
+
+    document.querySelectorAll(".tab").forEach(tab => {
+        tab.classList.remove("active");
+    });
+
+    button.classList.add("active");
+}
+
+showExam("endterm", document.querySelector(".tab.active"));
+</script>
+
+</body>
+</html>
